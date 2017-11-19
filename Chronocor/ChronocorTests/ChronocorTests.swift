@@ -7,6 +7,8 @@
 //
 
 import XCTest
+import EventKit
+
 @testable import Chronocor
 
 class ChronocorTests: XCTestCase {
@@ -33,29 +35,73 @@ class ChronocorTests: XCTestCase {
         }
     }
     
+    func testCheckCalendarAuthorizationStatus() {
+        let status = EKEventStore.authorizationStatus(for: EKEntityType.event)
+        
+        switch (status) {
+        case EKAuthorizationStatus.notDetermined:
+            // This happens on first-run
+            NSLog("Indeterminado")
+        case EKAuthorizationStatus.authorized:
+            // Things are in line with being able to show the calendars in the table view
+            NSLog("Autorizado")
+        case EKAuthorizationStatus.restricted, EKAuthorizationStatus.denied:
+            // We need to help them give us permission
+            NSLog("Não autorizado")
+        }
+    }
+    
+    func testRequestAccessToCalendar() {
+        let eventStore = EKEventStore()
+        eventStore.requestAccess(to: EKEntityType.event, completion: {
+            (accessGranted: Bool, error: Error?) in
+            if accessGranted {
+                NSLog("Autorizado")
+            } else {
+                assertionFailure("Não autorizado")
+            }
+            if(error != nil){
+                assertionFailure((error?.localizedDescription)!)
+            }
+        })
+    }
+    
     func testCreateCalendar(){
+        let eventStore = EKEventStore()
+        let calendar = EKCalendar(for: .event, eventStore: eventStore)
+        calendar.title = "Chronocor"
+        calendar.source = eventStore.sources.filter{
+                (source: EKSource) -> Bool in
+                source.sourceType.rawValue == EKSourceType.local.rawValue
+            }.first!
+        do {
+            try eventStore.saveCalendar(calendar, commit: true)
+        }catch {
+            assertionFailure("Erro ao salvar calendário" + (error as NSError).localizedDescription)
+        }
         
     }
     
     func testCreateEventInCalendar(){
+        let eventStore = EKEventStore()
         let newEvent = EKEvent(eventStore: eventStore)
         
-        newEvent.calendar = calendarForEvent
-        newEvent.title = self.eventNameTextField.text ?? "Some Event Name"
-        newEvent.startDate = Date
-        newEvent.endDate = Date
-        do {
-            try eventStore.saveEvent(newEvent, span: .ThisEvent, commit: true)
-            delegate?.eventDidAdd()
-            
-            self.dismissViewControllerAnimated(true, completion: nil)
-        } catch {
-            let alert = UIAlertController(title: "Event could not save", message: (error as NSError).localizedDescription, preferredStyle: .Alert)
-            let OKAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
-            alert.addAction(OKAction)
-            
-            self.presentViewController(alert, animated: true, completion: nil)
+        for calendar in eventStore.calendars(for: .event){
+            NSLog("Calendário:" + calendar.title)
+            if calendar.title == "Chronocor" {
+                newEvent.calendar = calendar
+                newEvent.title = "TRABALHO"
+                newEvent.startDate = NSDate() as Date!
+                newEvent.endDate = Calendar.current.date(byAdding: .hour, value: 1, to: NSDate() as Date)
+                do {
+                    try eventStore.save(newEvent, span: .thisEvent, commit: true)
+                } catch {
+                    assertionFailure("Erro ao salvar calendário" + (error as NSError).localizedDescription)
+                }
+                return
+            }
         }
+        assertionFailure("Calendário não localizado.")
     }
     
 }
