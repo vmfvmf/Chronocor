@@ -17,7 +17,6 @@ class ChronocorTableViewController: UITableViewController {
         super.viewDidLoad()
         
         loadChronocors()
-
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -37,24 +36,42 @@ class ChronocorTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1//chronocors.count
+        return chronocors.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellIdentifier = "ChronocorTableViewCell"
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? ChronocorTableViewCell  else { fatalError("The dequeued cell is not an instance of ChronocrTableViewCell.") }
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? ChronocorTableViewCell else { fatalError("The dequeued cell is not an instance of ChronocrTableViewCell."  ) }
 
         // Fetches the appropriate meal for the data source layout.
         let chron = chronocors[indexPath.row]
-        let calendar = Calendar.current
-     
-        cell.dia.text = "01"//calendar.component(.day, from: chron.diaTrabalho.startDate).description
-        cell.ano.text = "02"//calendar.component(.year, from: chron.diaTrabalho.startDate).description
-        cell.mes.text = "2017"//calendar.component(.month, from: chron.diaTrabalho.startDate).description
         
-        cell.entradaTrab.text = "12:00"//calendar.component(.hour, from: chron.diaTrabalho.startDate).description
-        cell.saidaTrab.text = "23:00"//calendar.component(.hour, from: chron.diaTrabalho.endDate).description
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.timeZone = NSTimeZone(name: "UTC")! as TimeZone
+        
+        let date = chron.diaTrabalho.startDate!
+        dateFormatter.dateFormat = "dd"
+        cell.dia.text = dateFormatter.string(from: date)
+        // chron.diaTrabalho.startDate
+        
+        dateFormatter.dateFormat = "yy"
+        cell.ano.text = dateFormatter.string(from: date)
+        
+        // chron.diaTrabalho.startDate
+        dateFormatter.dateFormat = "MM"
+        cell.mes.text = dateFormatter.string(from: date)
+        // chron.diaTrabalho.startDate
+        
+        dateFormatter.dateFormat = "HH:mm"
+        cell.entradaTrab.text = dateFormatter.string(from: chron.diaTrabalho.startDate)
+        cell.saidaTrab.text = dateFormatter.string(from: chron.diaTrabalho.endDate)
+        
+        
+        cell.inicioAlmoco.text = dateFormatter.string(from: chron.horarioAlmoco.startDate)
+        cell.fimAlmoco.text = dateFormatter.string(from: chron.horarioAlmoco.endDate)
 
         return cell
     }
@@ -119,8 +136,8 @@ class ChronocorTableViewController: UITableViewController {
                     end: fim,
                     calendars: [calendar])
                 for event in eventStore.events(matching: predicate){
-                    chronocors += [Chronocor(diaTrabalho: event,horarioAlmoco: event)]
-                    NSLog("Adicionar evento")
+                    chronocors.append(Chronocor(diaTrabalho: event,horarioAlmoco: event))
+                    NSLog("Evento: " + event.title + event.startDate.description)
                 }
             }
         }

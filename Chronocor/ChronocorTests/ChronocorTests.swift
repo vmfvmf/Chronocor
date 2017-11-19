@@ -108,7 +108,7 @@ class ChronocorTests: XCTestCase {
             if calendar.title == "Chronocor" {
                 newEvent.calendar = calendar
                 newEvent.title = "TRABALHO"
-                newEvent.startDate = Calendar.current.date(byAdding: .day, value: -30, to: NSDate() as Date!)
+                newEvent.startDate = Calendar.current.date(byAdding: .day, value: -3, to: NSDate() as Date!)
                 newEvent.endDate = Calendar.current.date(byAdding: .hour, value: 1, to: newEvent.startDate)
                 do {
                     try eventStore.save(newEvent, span: .thisEvent, commit: true)

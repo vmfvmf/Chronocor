@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ChronocorViewController.swift
 //  Chronocor
 //
 //  Created by Vinicius Martins Ferraz on 18/11/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ChronocorViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
