@@ -89,39 +89,20 @@ class ChronocorTests: XCTestCase {
         }
     }
     
-    func getChronocor() -> EKCalendar?{
-        let eventStore = EKEventStore()
-        for calendar in eventStore.calendars(for: .event){
-            if calendar.title == "Chronocor" {
-                return calendar
-            }
-        }
-        return nil
-    }
-    
     func testCreateEventInCalendar(){
         let eventStore = EKEventStore()
         let newEvent = EKEvent(eventStore: eventStore)
         
-        for calendar in eventStore.calendars(for: .event){
-            //NSLog("Calendário:" + calendar.title)
-            if calendar.title == "Chronocor" {
-                newEvent.calendar = calendar
-                newEvent.title = "TRABALHO"
-                newEvent.startDate = Calendar.current.date(byAdding: .day, value: -3, to: NSDate() as Date!)
-                newEvent.endDate = Calendar.current.date(byAdding: .hour, value: 1, to: newEvent.startDate)
-                do {
-                    try eventStore.save(newEvent, span: .thisEvent, commit: true)
-                } catch {
-                    assertionFailure("Erro ao salvar calendário" + (error as NSError).localizedDescription)
-                }
-                return
-            }
+        newEvent.calendar = getChronocor()
+        newEvent.title = "TRABALHO"
+        newEvent.startDate = Calendar.current.date(byAdding: .day, value: 0, to: NSDate() as Date!)
+        newEvent.endDate = Calendar.current.date(byAdding: .hour, value: 0, to: newEvent.startDate)
+        do {
+                try eventStore.save(newEvent, span: .thisEvent, commit: true)
+        } catch {
+                assertionFailure("Erro ao salvar calendário" + (error as NSError).localizedDescription)
         }
-        assertionFailure("Calendário não localizado.")
     }
-    
-    
     
     func testGetEventsOfPeriod(){
         let eventStore = EKEventStore()
@@ -145,14 +126,60 @@ class ChronocorTests: XCTestCase {
             }
         }
     }
-}
-
-extension Date {
-    public func startOfMonth() -> Date {
-        return Calendar.current.date(from: Calendar.current.dateComponents([.year, .month, .day], from: Calendar.current.startOfDay(for: self)))!
+    
+    func testGetTrabalhosDoDia(){
+        let eventStore = EKEventStore()
+        let chronocor = getChronocor()!
+        let inicio = Calendar(identifier: .gregorian).startOfDay(for: Date())
+        let fim = Calendar(identifier: .gregorian).startOfDay(for: Calendar.current.date(byAdding: DateComponents(day: 1), to: inicio)!)
+        NSLog("Inicio: " + inicio.description + " | Fim: " + fim.description)
+        let predicate = eventStore.predicateForEvents(
+            withStart: inicio,
+            end: fim,
+            //Date(),
+            calendars: [chronocor])
+        let events = eventStore.events(matching: predicate)
+        if events.count < 1 {
+            assertionFailure("Sem eventos!")
+        } else {
+            for e in events {
+                NSLog("EVENTO " + Date().description + ": " + e.description)
+            }
+        }
     }
     
-    func endOfMonth() -> Date {
-        return Calendar.current.date(byAdding: DateComponents(month: 1, day: -1), to: self.startOfMonth())!
+    func testDeleteAllEventsFromChronocor(){
+        let eventStore = EKEventStore()
+        let chronocor = getChronocor()!
+        let inicio = Calendar.current.date(byAdding: DateComponents(day: -90), to: NSDate() as Date)!
+        NSLog("Inicio: " + inicio.description)
+        let fim = Calendar.current.date(byAdding: DateComponents(day: 90), to: inicio)!
+        NSLog("Fim: " + fim.description)
+        let predicate = eventStore.predicateForEvents(
+            withStart: inicio,
+            end: fim,
+            calendars: [chronocor])
+        NSLog("Qtd: " + eventStore.events(matching: predicate).count.description)
+        for event in eventStore.events(matching: predicate){
+            NSLog("Evento: " + event.title + event.startDate.description)
+            do{
+                try eventStore.remove(event, span: .thisEvent, commit: true)
+            }
+            catch {
+                assertionFailure("Erro ao salvar calendário" + (error as NSError).localizedDescription)
+            }
+        }
+    }
+    
+    // MARK: private methods
+    func getChronocor() -> EKCalendar?{
+        let eventStore = EKEventStore()
+        for calendar in eventStore.calendars(for: .event){
+            if calendar.title == "Chronocor" {
+                return calendar
+            }
+        }
+        return nil
     }
 }
+

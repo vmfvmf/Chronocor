@@ -14,7 +14,7 @@
 		8538E2801FC0F2CC004E6AB7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8538E27E1FC0F2CC004E6AB7 /* LaunchScreen.storyboard */; };
 		8538E28B1FC0F2CC004E6AB7 /* ChronocorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8538E28A1FC0F2CC004E6AB7 /* ChronocorTests.swift */; };
 		8538E2961FC0F2CC004E6AB7 /* ChronocorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8538E2951FC0F2CC004E6AB7 /* ChronocorUITests.swift */; };
-		85B5B3CC1FC13128002E1216 /* Chronocor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B5B3CB1FC13128002E1216 /* Chronocor.swift */; };
+		85B5B3CC1FC13128002E1216 /* RegistroTrabalho.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B5B3CB1FC13128002E1216 /* RegistroTrabalho.swift */; };
 		85B5B3CE1FC140F9002E1216 /* ChronocorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B5B3CD1FC140F9002E1216 /* ChronocorTableViewController.swift */; };
 		85F75C9F1FC12BE700A449DB /* ChronocorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85F75C9E1FC12BE700A449DB /* ChronocorTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -50,7 +50,7 @@
 		8538E2911FC0F2CC004E6AB7 /* ChronocorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChronocorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8538E2951FC0F2CC004E6AB7 /* ChronocorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChronocorUITests.swift; sourceTree = "<group>"; };
 		8538E2971FC0F2CC004E6AB7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		85B5B3CB1FC13128002E1216 /* Chronocor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chronocor.swift; sourceTree = "<group>"; };
+		85B5B3CB1FC13128002E1216 /* RegistroTrabalho.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistroTrabalho.swift; sourceTree = "<group>"; };
 		85B5B3CD1FC140F9002E1216 /* ChronocorTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChronocorTableViewController.swift; sourceTree = "<group>"; };
 		85F75C9E1FC12BE700A449DB /* ChronocorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChronocorTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -107,7 +107,7 @@
 				8538E2751FC0F2CC004E6AB7 /* AppDelegate.swift */,
 				8538E2771FC0F2CC004E6AB7 /* ChronocorViewController.swift */,
 				8538E2791FC0F2CC004E6AB7 /* Main.storyboard */,
-				85B5B3CB1FC13128002E1216 /* Chronocor.swift */,
+				85B5B3CB1FC13128002E1216 /* RegistroTrabalho.swift */,
 				8538E27C1FC0F2CC004E6AB7 /* Assets.xcassets */,
 				8538E27E1FC0F2CC004E6AB7 /* LaunchScreen.storyboard */,
 				8538E2811FC0F2CC004E6AB7 /* Info.plist */,
@@ -272,7 +272,7 @@
 				85F75C9F1FC12BE700A449DB /* ChronocorTableViewCell.swift in Sources */,
 				85B5B3CE1FC140F9002E1216 /* ChronocorTableViewController.swift in Sources */,
 				8538E2761FC0F2CC004E6AB7 /* AppDelegate.swift in Sources */,
-				85B5B3CC1FC13128002E1216 /* Chronocor.swift in Sources */,
+				85B5B3CC1FC13128002E1216 /* RegistroTrabalho.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
